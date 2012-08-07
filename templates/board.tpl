@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="static/css/ui-lightness/jquery-ui-1.8.22.custom.css" />
   <link rel="stylesheet" href="static/css/app.css" />
 
+  <div id="nav">
+  </div>
+
   <div id="main">
     <div class="list">
         <div class="list-header">Backlog</div>
@@ -39,7 +42,8 @@
                 Do a thing
             </div>
             <div class="card">
-                Do another thing, with a longer description
+                Do another thing, with a longer description.<br />
+                This one has quite a lot of detail.
             </div>
         </div>
         <div class="list-footer">Add a card...</div>

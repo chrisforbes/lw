@@ -8,6 +8,6 @@ $(function(){
         tolerance:'pointer',
         placeholder:'card-placeholder',
         forcePlaceholderSize: true,
-        connectTo: $('div.list-body')
+        connectWith: 'div.list-body'
         }).disableSelection();
 });
