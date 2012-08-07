@@ -11,42 +11,18 @@
   </div>
 
   <div id="main">
-    <div class="list" id="list-1">
-        <div class="list-header">Backlog</div>
-        <div class="list-body">
-            <div class="card" id="card-1">
-                Do a thing
-            </div>
-            <div class="card" id="card-2">
-                Do another thing, with a longer description
-            </div>
+% for list in lists:
+    <div class="list" id="{{list['name']}}">
+      <div class="list-header">{{list['label']}}</div>
+      <div class="list-body">
+% for card in list['cards']:
+        <div class="card" id="{{card['name']}}">
+            {{card['desc']}}
         </div>
-        <div class="list-footer">Add a card...</div>
+% end
+      </div>
+      <div class="list-footer">Add a card...</div>
     </div>
-    <div class="list" id="list-2">
-        <div class="list-header">In Progress</div>
-        <div class="list-body">
-            <div class="card" id="card-3">
-                Do a thing
-            </div>
-            <div class="card" id="card-4">
-                Do another thing, with a longer description
-            </div>
-        </div>
-        <div class="list-footer">Add a card...</div>
-    </div>
-    <div class="list" id="list-3">
-        <div class="list-header">Done</div>
-        <div class="list-body">
-            <div class="card" id="card-5">
-                Do a thing
-            </div>
-            <div class="card" id="card-6">
-                Do another thing, with a longer description.<br />
-                This one has quite a lot of detail.
-            </div>
-        </div>
-        <div class="list-footer">Add a card...</div>
-    </div>
+% end
   </div>
 </html>
