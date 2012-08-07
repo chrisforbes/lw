@@ -74,12 +74,13 @@ def new_card():
     next_id += 1
     new_card = { 'name': new_id, 'desc': label }
     the_list = [l for l in lists if l['name'] == list_id][0]
+    after_id = len(the_list['cards']) and the_list['cards'][-1]['name'] or None
     the_list['cards'].append(new_card)
 
-    # 2. notify other listeners TODO
+    # 2. notify other listeners
     add_event( 'new_card', {
         'list': list_id,
-        'after': 'foo',
+        'after': after_id,
         'name': new_card['name'],
         'desc': new_card['desc'],
         })
