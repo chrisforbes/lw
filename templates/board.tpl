@@ -11,37 +11,37 @@
   </div>
 
   <div id="main">
-    <div class="list">
+    <div class="list" id="list-1">
         <div class="list-header">Backlog</div>
         <div class="list-body">
-            <div class="card">
+            <div class="card" id="card-1">
                 Do a thing
             </div>
-            <div class="card">
+            <div class="card" id="card-2">
                 Do another thing, with a longer description
             </div>
         </div>
         <div class="list-footer">Add a card...</div>
     </div>
-    <div class="list">
+    <div class="list" id="list-2">
         <div class="list-header">In Progress</div>
         <div class="list-body">
-            <div class="card">
+            <div class="card" id="card-3">
                 Do a thing
             </div>
-            <div class="card">
+            <div class="card" id="card-4">
                 Do another thing, with a longer description
             </div>
         </div>
         <div class="list-footer">Add a card...</div>
     </div>
-    <div class="list">
+    <div class="list" id="list-3">
         <div class="list-header">Done</div>
         <div class="list-body">
-            <div class="card">
+            <div class="card" id="card-5">
                 Do a thing
             </div>
-            <div class="card">
+            <div class="card" id="card-6">
                 Do another thing, with a longer description.<br />
                 This one has quite a lot of detail.
             </div>

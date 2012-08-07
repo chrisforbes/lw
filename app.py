@@ -3,6 +3,14 @@ from bottle import \
 
 debug(True)
 
+@post('/list/move')
+def list_move():
+    return {}
+
+@post('/card/move')
+def card_move():
+    return {}
+
 @get('/')
 @view('templates/board.tpl')
 def get_page():
