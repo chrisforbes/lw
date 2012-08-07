@@ -48,13 +48,16 @@ def remove_card(card_id):
 
 @post('/card/new')
 def new_card():
+    global next_id
+
     # 1. update the model
     list_id = request.json['list']
     label = request.json['label']
     new_id = 'card-%d' % (next_id,)
     next_id += 1
-    new_card = { 'name': new_id, 'label': label }
-    lists[list_id].cards.append(new_card)
+    new_card = { 'name': new_id, 'desc': label }
+    the_list = [l for l in lists if l['name'] == list_id][0]
+    the_list['cards'].append(new_card)
 
     # 2. notify other listeners TODO
     return new_card
