@@ -4,7 +4,7 @@ $(function(){
         tolerance:'pointer',
         placeholder:'list-placeholder',
         forcePlaceholderSize: true
-        }).disableSelection();
+        });
 
     $('#main').bind( 'sortupdate', function(ev,ui) {
         var update = {
@@ -39,5 +39,14 @@ $(function(){
 
         ev.stopPropagation();   /* if we let this continue to bubble, #main's handler
                                     gets involved too; we don't want that. */
+        });
+
+    /* set up add machinery */
+    $('div.list-footer').bind( 'click', function(ev,ui) {
+        $(this).prev('div.add-machinery').show().find('textarea').focus();
+        });
+
+    $('div.add-machinery :reset').bind( 'click', function(ev,ui) {
+        $(this).closest('div.add-machinery').hide();
         });
 });

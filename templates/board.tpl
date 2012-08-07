@@ -21,6 +21,13 @@
         </div>
 % end
       </div>
+      <div class="add-machinery">
+        <form>
+          <textarea rows=3></textarea>
+          <button type="submit">Add</button>
+          <button type="reset">Cancel</button>
+        </form>
+      </div>
       <div class="list-footer">Add a card...</div>
     </div>
 % end
