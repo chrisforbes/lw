@@ -30,17 +30,19 @@ lists = [
 ]
 
 def indexof_first(xs, f):
-    for (i,x) in enumerate(xs):
-        if f(x):
-            return i
-    return -1
+    return ([i for i,x in enumerate(xs) if f(x)] or [-1])[0]
 
 def insert_after(xs, x, after):
-    lists.insert(1 + indexof_first(xs,
+    xs.insert(1 + indexof_first(xs,
         lambda a:a['name'] == after), x)
 
 def remove_card(card_id):
-    pass
+    for l in lists:
+        for c in l['cards']:
+            if card_id == c['name']:
+                l['cards'].remove(c)
+                return c
+    raise ValueError()
 
 @post('/list/move')
 def list_move():
@@ -58,11 +60,25 @@ def list_move():
 
 @post('/card/move')
 def card_move():
+    # 1. update the model
+    list_id = request.json['list']
+    card_id = request.json['card']
+    after_id = request.json['after']
+
+    card = remove_card(card_id)
+    the_list = [l for l in lists if l['name'] == list_id][0]
+    insert_after(the_list['cards'], card, after_id)
+
+    # 2. notify other listeners TODO
     return {}
 
 @get('/')
 @view('templates/board.tpl')
 def get_page():
+    return { 'lists': lists }
+
+@get('/raw')
+def get_raw_model():
     return { 'lists': lists }
 
 @get('/static/<path:path>')
