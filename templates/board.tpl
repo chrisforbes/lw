@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <title>Lightweight Process Machine</title>
+  <script src="static/js/jquery-1.7.2.min.js"></script>
+  <script src="static/js/jquery-ui-1.8.22.custom.min.js"></script>
+  <script src="static/js/app.js"></script>
+  <link rel="stylesheet" href="static/css/ui-lightness/jquery-ui-1.8.22.custom.css" />
+  <link rel="stylesheet" href="static/css/app.css" />
+
+  <div id="main">
+    <div class="list">Stuff to do</div>
+    <div class="list">In progress</div>
+    <div class="list">
+        <div class="list-header">Done</div>
+        <div class="list-body">
+            <div class="card">
+                Do a thing
+            </div>
+            <div class="card">
+                Do another thing
+            </div>
+        </div>
+        <div class="list-footer">Add a card...</div>
+    </div>
+  </div>
+</html>
