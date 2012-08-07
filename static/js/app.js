@@ -26,8 +26,13 @@ $(function(){
         }).disableSelection();
 
     $('div.list-body').bind( 'sortupdate', function(ev,ui) {
+        if (ui.item.closest('div.list').attr('id') != $(this).closest('div.list').attr('id')) {
+            ev.stopPropagation();
+            return;
+        }
+
         var update = {
-            'list': $(this).closest('div.list').attr('id'),
+            'list': ui.item.closest('div.list').attr('id'),
             'card': ui.item.attr('id'),
             'after': ui.item.prev().attr('id') || null,
         };
