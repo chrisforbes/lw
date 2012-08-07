@@ -108,9 +108,9 @@ $(function(){
                 for (i in data.events) {
                     handle_event( data.events[i] );
                 }
-                /* get things again in 5s */
+                /* get things again in 10s */
                 if (!oneshot) {
-                    setTimeout( poll_event, 5000 );
+                    setTimeout( poll_event, 10000 );
                 }
             }});
     };
