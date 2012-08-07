@@ -8,8 +8,30 @@
   <link rel="stylesheet" href="static/css/app.css" />
 
   <div id="main">
-    <div class="list">Stuff to do</div>
-    <div class="list">In progress</div>
+    <div class="list">
+        <div class="list-header">Backlog</div>
+        <div class="list-body">
+            <div class="card">
+                Do a thing
+            </div>
+            <div class="card">
+                Do another thing, with a longer description
+            </div>
+        </div>
+        <div class="list-footer">Add a card...</div>
+    </div>
+    <div class="list">
+        <div class="list-header">In Progress</div>
+        <div class="list-body">
+            <div class="card">
+                Do a thing
+            </div>
+            <div class="card">
+                Do another thing, with a longer description
+            </div>
+        </div>
+        <div class="list-footer">Add a card...</div>
+    </div>
     <div class="list">
         <div class="list-header">Done</div>
         <div class="list-body">
@@ -17,7 +39,7 @@
                 Do a thing
             </div>
             <div class="card">
-                Do another thing
+                Do another thing, with a longer description
             </div>
         </div>
         <div class="list-footer">Add a card...</div>

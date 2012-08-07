@@ -12,4 +12,4 @@ def get_page():
 def get_static(path):
     return static_file(path, root='static')
 
-run(reloader=True)
+run(reloader=True, host='0.0.0.0')

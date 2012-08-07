@@ -1,4 +1,7 @@
-body { margin: 0px }
+body {
+    margin: 0px;
+    font-family: Tahoma, Sans
+}
 
 #main {
     margin: 0px;
@@ -9,23 +12,42 @@ body { margin: 0px }
     padding-right: 5px
 }
 
-div.list {
+div.list, div.list-placeholder {
     float:left;
     width:200px;
-    padding: 2px;
     margin: 5px;
     margin-right: 0px;
     background-color: #eee;
     border-radius: 8px;
+    box-shadow: 0px 0px 1px 1px #600;
 }
 
-div.list-header { font-weight: bold }
-div.list-footer:hover { background-color: #ddd }
+div.list-placeholder { float:left; background-color: #600 }
+
+div.list-header {
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer
+}
+
+div.list-footer {
+    padding: 5px;
+    border-radius: 0px 0px 8px 8px
+}
+div.list-footer:hover {
+    background-color: #ddd;
+    cursor: pointer
+}
 div.list-body { min-height: 70px }
 
-div.card {
+div.card, div.card-placeholder {
     background-color: #fff;
     border-radius: 5px;
-    margin-bottom: 2px;
+    margin: 0px 4px 4px 4px;
     padding: 4px;
+    cursor: pointer
 }
+
+div.card-placeholder { background-color: #ddd }
+
+div.card:hover { box-shadow: 0px 0px 1px 1px #f00 }
