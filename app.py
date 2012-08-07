@@ -29,8 +29,31 @@ lists = [
     },
 ]
 
+def indexof_first(xs, f):
+    for (i,x) in enumerate(xs):
+        if f(x):
+            return i
+    return -1
+
+def insert_after(xs, x, after):
+    lists.insert(1 + indexof_first(xs,
+        lambda a:a['name'] == after), x)
+
+def remove_card(card_id):
+    pass
+
 @post('/list/move')
 def list_move():
+    # 1. update the model
+    list_id = request.json['list']
+    after_id = request.json['after']
+
+    the_list = [l for l in lists if l['name'] == list_id][0]
+    lists.remove(the_list)
+
+    insert_after(lists, the_list, after_id)
+
+    # 2. notify other listeners TODO
     return {}
 
 @post('/card/move')
