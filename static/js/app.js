@@ -76,9 +76,9 @@ $(function(){
             data: JSON.stringify(update),
             success: function(data) {
                 /* insert the card */
-                var newCard = $('<div class=card id=' + data.name + 
+                var newCard = $('<div class=card style=display:none id=' + data.name + 
                     '>' + data.desc + '</div>');
-                list.find('div.list-body').append(newCard);
+                newCard.appendTo(list.find('div.list-body')).fadeIn();
             }});
         });
 });
