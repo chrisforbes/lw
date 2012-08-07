@@ -115,11 +115,14 @@ def card_move():
 @get('/')
 @view('templates/board.tpl')
 def get_page():
-    return { 'lists': lists }
+    return get_raw_model()
 
 @get('/raw')
 def get_raw_model():
-    return { 'lists': lists }
+    return {
+      'lists': lists,
+      'last_event_id': next_event_id - 1
+    }
 
 @get('/static/<path:path>')
 def get_static(path):

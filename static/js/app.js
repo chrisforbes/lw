@@ -79,12 +79,9 @@ $(function(){
             });
         });
 
-    var last_event_id = -1; /* TODO: set this from the template when we render the initial things */
-
     var handle_event = function(ev) {
-        if (last_event_id < ev.id) {
-            last_event_id = ev.id;
-        }
+        if (last_event_id >= ev.id) return;
+        last_event_id = ev.id;
 
         /* todo: do stuff */
         switch( ev.type ) {

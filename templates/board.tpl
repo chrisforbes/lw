@@ -3,6 +3,7 @@
   <title>Lightweight Process Machine</title>
   <script src="static/js/jquery-1.7.2.min.js"></script>
   <script src="static/js/jquery-ui-1.8.22.custom.min.js"></script>
+  <script type="text/javascript">last_event_id={{last_event_id}}</script>
   <script src="static/js/app.js"></script>
   <link rel="stylesheet" href="static/css/ui-lightness/jquery-ui-1.8.22.custom.css" />
   <link rel="stylesheet" href="static/css/app.css" />
