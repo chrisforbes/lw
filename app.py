@@ -31,6 +31,9 @@ lists = [
 
 next_id = 7
 
+next_event_id = 0
+events = []
+
 def indexof_first(xs, f):
     return ([i for i,x in enumerate(xs) if f(x)] or [-1])[0]
 
@@ -46,6 +49,20 @@ def remove_card(card_id):
                 return c
     raise ValueError()
 
+def add_event(etype, data):
+    global events, next_event_id
+    events.append( {
+      'id': next_event_id,
+      'type': etype,
+      'data': data })
+    next_event_id += 1
+
+@post('/events')
+def get_events():
+    global events
+    since_id = request.json['since']
+    return { 'events': [e for e in events if e['id'] > since_id] }
+
 @post('/card/new')
 def new_card():
     global next_id
@@ -60,7 +77,12 @@ def new_card():
     the_list['cards'].append(new_card)
 
     # 2. notify other listeners TODO
-    return new_card
+    add_event( 'new_card', {
+        'list': list_id,
+        'after': 'foo',
+        'name': new_card['name'],
+        'desc': new_card['desc'],
+        })
 
 @post('/list/move')
 def list_move():

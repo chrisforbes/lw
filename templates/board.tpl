@@ -23,7 +23,7 @@
       </div>
       <div class="add-machinery">
         <form>
-          <textarea rows=3></textarea>
+          <textarea rows=3></textarea><br/>
           <button type="submit">Add</button>
           <button type="reset">Cancel</button>
         </form>

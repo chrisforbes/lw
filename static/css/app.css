@@ -74,3 +74,10 @@ div.add-machinery textarea {
     border: 1px solid red;
     width: -moz-calc(100% - 6px);
 }
+
+div.add-machinery button {
+    border-radius: 6px;
+    padding: 5px;
+    background-color: #400;
+    color: #eee
+}

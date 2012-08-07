@@ -1,4 +1,5 @@
 $(function(){
+
     /* set up dragging of lists */
     $('#main').sortable({
         tolerance:'pointer',
@@ -74,11 +75,44 @@ $(function(){
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(update),
-            success: function(data) {
-                /* insert the card */
-                var newCard = $('<div class=card style=display:none id=' + data.name + 
-                    '>' + data.desc + '</div>');
-                newCard.appendTo(list.find('div.list-body')).fadeIn();
-            }});
+            success: function(data) { poll_event(true); },
+            });
         });
+
+    var last_event_id = -1; /* TODO: set this from the template when we render the initial things */
+
+    var handle_event = function(ev) {
+        if (last_event_id < ev.id) {
+            last_event_id = ev.id;
+        }
+
+        /* todo: do stuff */
+        switch( ev.type ) {
+        case 'new_card':
+            {
+                var newCard = $('<div class=card type=display:none id=' + ev.data.name + 
+                    '>' + ev.data.desc + '</div>');
+                newCard.appendTo($('div.list#' + ev.data.list + ' div.list-body')).fadeIn();
+            }
+            break;
+        }
+    };
+
+    var poll_event;
+    poll_event = function(oneshot) {
+        $.ajax('/events', {
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify( { 'since': last_event_id } ),
+            success: function(data) {
+                for (i in data.events) {
+                    handle_event( data.events[i] );
+                }
+                /* get things again in 5s */
+                if (!oneshot) {
+                    setTimeout( poll_event, 5000 );
+                }
+            }});
+    };
+    poll_event();
 });
