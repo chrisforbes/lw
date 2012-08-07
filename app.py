@@ -29,6 +29,8 @@ lists = [
     },
 ]
 
+next_id = 7
+
 def indexof_first(xs, f):
     return ([i for i,x in enumerate(xs) if f(x)] or [-1])[0]
 
@@ -43,6 +45,19 @@ def remove_card(card_id):
                 l['cards'].remove(c)
                 return c
     raise ValueError()
+
+@post('/card/new')
+def new_card():
+    # 1. update the model
+    list_id = request.json['list']
+    label = request.json['label']
+    new_id = 'card-%d' % (next_id,)
+    next_id += 1
+    new_card = { 'name': new_id, 'label': label }
+    lists[list_id].cards.append(new_card)
+
+    # 2. notify other listeners TODO
+    return new_card
 
 @post('/list/move')
 def list_move():
