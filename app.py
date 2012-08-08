@@ -113,7 +113,7 @@ def card_move():
     the_list = [l for l in lists if l['name'] == list_id][0]
     insert_after(the_list['cards'], card, after_id)
 
-    # 2. notify other listeners TODO
+    # 2. notify other listeners
     add_event( 'card_move', {
         'list': list_id,
         'card': card_id,
