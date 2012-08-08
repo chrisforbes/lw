@@ -15,7 +15,9 @@ $(function(){
         $.ajax( '/list/move', {
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(update) });
+            data: JSON.stringify(update),
+            success: function(data) { poll_event(true); }
+            });
         });
 
     /* set up dragging of cards around */
@@ -41,7 +43,9 @@ $(function(){
         $.ajax( '/card/move', {
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(update) });
+            data: JSON.stringify(update),
+            success: function(data) { poll_event(true); }
+            });
 
         ev.stopPropagation();   /* if we let this continue to bubble, #main's handler
                                     gets involved too; we don't want that. */
