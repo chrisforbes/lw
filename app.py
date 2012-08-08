@@ -96,8 +96,11 @@ def list_move():
 
     insert_after(lists, the_list, after_id)
 
-    # 2. notify other listeners TODO
-    return {}
+    # 2. notify other listeners
+    add_event( 'list_move', {
+        'list': list_id,
+        'after': after_id
+        })
 
 @post('/card/move')
 def card_move():
@@ -111,7 +114,11 @@ def card_move():
     insert_after(the_list['cards'], card, after_id)
 
     # 2. notify other listeners TODO
-    return {}
+    add_event( 'card_move', {
+        'list': list_id,
+        'card': card_id,
+        'after': after_id
+        })
 
 @get('/')
 @view('templates/board.tpl')

@@ -4,7 +4,7 @@ $(function(){
     $('#main').sortable({
         tolerance:'pointer',
         placeholder:'list-placeholder',
-        forcePlaceholderSize: true
+        forcePlaceholderSize: true,
         });
 
     $('#main').bind( 'sortupdate', function(ev,ui) {
@@ -23,7 +23,7 @@ $(function(){
         tolerance:'pointer',
         placeholder:'card-placeholder',
         forcePlaceholderSize: true,
-        connectWith: 'div.list-body'
+        connectWith: 'div.list-body',
         }).disableSelection();
 
     $('div.list-body').bind( 'sortupdate', function(ev,ui) {
