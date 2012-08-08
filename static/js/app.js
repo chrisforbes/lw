@@ -87,13 +87,14 @@ $(function(){
         if (last_event_id >= ev.id) return;
         last_event_id = ev.id;
 
-        /* todo: do stuff */
         switch( ev.type ) {
         case 'new_card':
             {
-                var newCard = $('<div class=card type=display:none id=' + ev.data.name + 
+                var el = $('<div class=card type=display:none id=' + ev.data.name + 
                     '>' + ev.data.desc + '</div>');
-                newCard.appendTo($('div.list#' + ev.data.list + ' div.list-body')).fadeIn();
+
+                if (ev.data.after) el.insertAfter('#'+ev.data.after).fadeIn();
+                else el.prependTo($('div.list#' + ev.data.list + ' div.list-body')).fadeIn();
             }
             break;
         case 'card_move':
