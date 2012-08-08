@@ -96,6 +96,20 @@ $(function(){
                 newCard.appendTo($('div.list#' + ev.data.list + ' div.list-body')).fadeIn();
             }
             break;
+        case 'card_move':
+            {
+                var el = $('#'+ev.data.card).detach();
+                if (ev.data.after) el.insertAfter('#'+ev.data.after);
+                else el.prependTo('#'+ev.data.list+' div.list-body');
+            }
+            break;
+        case 'list_move':
+            {
+                var el = $('#'+ev.data.list).detach();
+                if (ev.data.after) el.insertAfter('#'+ev.data.after);
+                else el.prependTo('#main');
+            }
+            break;
         }
     };
 
