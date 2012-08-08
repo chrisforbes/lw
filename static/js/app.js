@@ -52,35 +52,39 @@ $(function(){
         });
 
     /* set up add machinery */
-    $('div.list-footer').bind( 'click', function(ev,ui) {
-        $(this).prev('div.add-machinery').show().find('textarea').focus();
+    $(document).on('click', 'div.list-footer',
+        function(ev,ui) {
+            $(this).prev('div.add-machinery').show()
+                .find('textarea').focus();
         });
 
-    /* break the normal form handling */
-    $('div.add-machinery form').submit(function() { return false; });
+    $(document).on('submit', 'div.add-machinery',
+        function() { return false; });
 
-    $('div.add-machinery :reset').bind( 'click', function(ev,ui) {
-        $(this).closest('div.add-machinery').hide();
+    $(document).on('click', 'div.add-machinery :reset',
+        function(ev,ui) {
+            $(this).closest('div.add-machinery').hide();
         });
 
-    $('div.add-machinery :submit').bind( 'click', function(ev,ui) {
-        var form = $(this).closest('div.add-machinery');
-        var list = $(this).closest('div.list');
+    $(document).on('click', 'div.add-machinery :submit',
+        function(ev,ui) {
+            var form = $(this).closest('div.add-machinery');
+            var list = $(this).closest('div.list');
 
-        var update = { 
-            'list': list.attr('id'),
-            'label': form.find('textarea').val()
-        };
+            var update = {
+                'list': list.attr('id'),
+                'label': form.find('textarea').val()
+            };
 
-        form.find('textarea').val('');
-        form.hide();
+            form.find('textarea').val('');
+            form.hide();
 
-        $.ajax( '/card/new', {
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(update),
-            success: function(data) { poll_event(true); },
-            });
+            $.ajax( '/card/new', {
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(update),
+                success: function(data) { poll_event(true); },
+                });
         });
 
     var handle_event = function(ev) {
