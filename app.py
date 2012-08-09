@@ -42,8 +42,8 @@ lists = [
 ]
 
 card_seq = Seq(6)
+event_seq = Seq(-1)
 
-next_event_id = 0
 events = []
 
 def indexof_first(xs, f):
@@ -62,12 +62,11 @@ def remove_card(card_id):
     raise ValueError()
 
 def add_event(etype, data):
-    global events, next_event_id
+    global events
     events.append( {
-      'id': next_event_id,
+      'id': event_seq.next(),
       'type': etype,
       'data': data })
-    next_event_id += 1
 
 @post('/events')
 def get_events():
@@ -138,7 +137,7 @@ def get_page():
 def get_raw_model():
     return {
       'lists': lists,
-      'last_event_id': next_event_id - 1
+      'last_event_id': event_seq.current()
     }
 
 @get('/static/<path:path>')
