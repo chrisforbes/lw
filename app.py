@@ -3,6 +3,18 @@ from bottle import \
 
 debug(True)
 
+# a sequence.
+class Seq(object):
+    def __init__(self, current_value=0):
+        self.current_value = current_value
+
+    def next(self):
+        self.current_value += 1
+        return self.current_value
+
+    def current(self):
+        return self.current_value
+
 # the model, stashed in teh memory for now.
 # TODO: push it out to a db
 lists = [
@@ -29,7 +41,7 @@ lists = [
     },
 ]
 
-next_id = 7
+card_seq = Seq(6)
 
 next_event_id = 0
 events = []
@@ -65,13 +77,10 @@ def get_events():
 
 @post('/card/new')
 def new_card():
-    global next_id
-
     # 1. update the model
     list_id = request.json['list']
     label = request.json['label']
-    new_id = 'card-%d' % (next_id,)
-    next_id += 1
+    new_id = 'card-%d' % (card_seq.next(),)
     new_card = { 'name': new_id, 'desc': label }
     the_list = [l for l in lists if l['name'] == list_id][0]
     after_id = len(the_list['cards']) and the_list['cards'][-1]['name'] or None
