@@ -17,34 +17,49 @@ class Seq(object):
 
 # the model, stashed in teh memory for now.
 # TODO: push it out to a db
-lists = [
-    { 'name':'list-1',
-      'label':'Backlog',
-      'cards': [
-        { 'name':'card-1', 'desc':'Do a thing' },
-        { 'name':'card-2', 'desc':'Do another thing, with a longer description' },
-      ]
-    },
-    { 'name':'list-2',
-      'label':'In Progress',
-      'cards': [
-        { 'name':'card-3', 'desc':'A thing which is initially in progress.' },
-        { 'name':'card-4', 'desc':'Another thing we\'re halfway through building.' },
-      ]
-    },
-    { 'name':'list-3',
-      'label':'Done',
-      'cards': [
-        { 'name':'card-5', 'desc':'Acquire beer.' },
-        { 'name':'card-6', 'desc':'Put beer in fridge.' },
-      ]
-    },
-]
+class Board(object):
+    def __init__(self):
+        self.lists = [
+            { 'name':'list-1',
+              'label':'Backlog',
+              'cards': [
+                { 'name':'card-1', 'desc':'Do a thing' },
+                { 'name':'card-2', 'desc':'Do another thing, with a longer description' },
+              ]
+            },
+            { 'name':'list-2',
+              'label':'In Progress',
+              'cards': [
+                { 'name':'card-3', 'desc':'A thing which is initially in progress.' },
+                { 'name':'card-4', 'desc':'Another thing we\'re halfway through building.' },
+              ]
+            },
+            { 'name':'list-3',
+              'label':'Done',
+              'cards': [
+                { 'name':'card-5', 'desc':'Acquire beer.' },
+                { 'name':'card-6', 'desc':'Put beer in fridge.' },
+              ]
+            },
+        ]
 
-card_seq = Seq(6)
-event_seq = Seq(-1)
+        self.card_seq = Seq(6)
+        self.event_seq = Seq(-1)
+        self.events = []
 
-events = []
+    def add_event(self, etype, data):
+        self.events.append( {
+          'id': self.event_seq.next(),
+          'type': etype,
+          'data': data })
+
+    def remove_card(self, card_id):
+        for l in self.lists:
+            for c in l['cards']:
+                if card_id == c['name']:
+                    l['cards'].remove(c)
+                    return c
+        raise ValueError()
 
 def indexof_first(xs, f):
     return ([i for i,x in enumerate(xs) if f(x)] or [-1])[0]
@@ -53,40 +68,26 @@ def insert_after(xs, x, after):
     xs.insert(1 + indexof_first(xs,
         lambda a:a['name'] == after), x)
 
-def remove_card(card_id):
-    for l in lists:
-        for c in l['cards']:
-            if card_id == c['name']:
-                l['cards'].remove(c)
-                return c
-    raise ValueError()
-
-def add_event(etype, data):
-    global events
-    events.append( {
-      'id': event_seq.next(),
-      'type': etype,
-      'data': data })
+board = Board()
 
 @post('/events')
 def get_events():
-    global events
     since_id = request.json['since']
-    return { 'events': [e for e in events if e['id'] > since_id] }
+    return { 'events': [e for e in board.events if e['id'] > since_id] }
 
 @post('/card/new')
 def new_card():
     # 1. update the model
     list_id = request.json['list']
     label = request.json['label']
-    new_id = 'card-%d' % (card_seq.next(),)
+    new_id = 'card-%d' % (board.card_seq.next(),)
     new_card = { 'name': new_id, 'desc': label }
-    the_list = [l for l in lists if l['name'] == list_id][0]
+    the_list = [l for l in board.lists if l['name'] == list_id][0]
     after_id = len(the_list['cards']) and the_list['cards'][-1]['name'] or None
     the_list['cards'].append(new_card)
 
     # 2. notify other listeners
-    add_event( 'new_card', {
+    board.add_event( 'new_card', {
         'list': list_id,
         'after': after_id,
         'name': new_card['name'],
@@ -99,13 +100,13 @@ def list_move():
     list_id = request.json['list']
     after_id = request.json['after']
 
-    the_list = [l for l in lists if l['name'] == list_id][0]
-    lists.remove(the_list)
+    the_list = [l for l in board.lists if l['name'] == list_id][0]
+    board.lists.remove(the_list)
 
-    insert_after(lists, the_list, after_id)
+    insert_after(board.lists, the_list, after_id)
 
     # 2. notify other listeners
-    add_event( 'list_move', {
+    board.add_event( 'list_move', {
         'list': list_id,
         'after': after_id
         })
@@ -117,12 +118,12 @@ def card_move():
     card_id = request.json['card']
     after_id = request.json['after']
 
-    card = remove_card(card_id)
-    the_list = [l for l in lists if l['name'] == list_id][0]
+    card = board.remove_card(card_id)
+    the_list = [l for l in board.lists if l['name'] == list_id][0]
     insert_after(the_list['cards'], card, after_id)
 
     # 2. notify other listeners
-    add_event( 'card_move', {
+    board.add_event( 'card_move', {
         'list': list_id,
         'card': card_id,
         'after': after_id
@@ -136,8 +137,8 @@ def get_page():
 @get('/raw')
 def get_raw_model():
     return {
-      'lists': lists,
-      'last_event_id': event_seq.current()
+      'lists': board.lists,
+      'last_event_id': board.event_seq.current()
     }
 
 @get('/static/<path:path>')
