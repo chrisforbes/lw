@@ -13,14 +13,14 @@ $(function(){
     $('#main').sortable({
         tolerance:'pointer',
         placeholder:'list-placeholder',
-        forcePlaceholderSize: true,
+        forcePlaceholderSize: true
     });
 
     $(document).on('sortupdate','#main', function(ev,ui) {
         ev.stopPropagation();
         post_event( '/list/move', {
             'list': ui.item.attr('id'),
-            'after': ui.item.prev().attr('id') || null,
+            'after': ui.item.prev().attr('id') || null
         });
     });
 
@@ -29,7 +29,7 @@ $(function(){
             tolerance:'pointer',
             placeholder:'card-placeholder',
             forcePlaceholderSize: true,
-            connectWith: '#main div.list-body',
+            connectWith: '#main div.list-body'
         }).disableSelection();
     };
 
@@ -45,7 +45,7 @@ $(function(){
         post_event( '/card/move', {
             'list': ui.item.closest('div.list').attr('id'),
             'card': ui.item.attr('id'),
-            'after': ui.item.prev().attr('id') || null,
+            'after': ui.item.prev().attr('id') || null
         });
     });
 
@@ -74,8 +74,13 @@ $(function(){
         form.hide();
     });
 
+    /* set up card editing machinery */
+    $(document).on('click', 'div.card', function(ev,ui) {
+        alert('Editing card ' + $(this).html());
+    });
+
     $.getJSON('/raw', function(data) {
-        last_event_id = data.last_event_id
+        last_event_id = data.last_event_id;
 
         for( var li in data.lists ) {
             var l = data.lists[li];
@@ -100,37 +105,39 @@ $(function(){
         poll_event();
     });
 
+    var event_handlers = {};
     var handle_event = function(ev) {
         if (last_event_id >= ev.id) return;
         last_event_id = ev.id;
 
-        switch( ev.type ) {
-        case 'new_card':
-            {
-                var el = $('#templates #card-template').clone();
-                el.attr('id', ev.data.name);
-                el.html(ev.data.desc);
-
-                if (ev.data.after) el.insertAfter('#'+ev.data.after);
-                else el.prependTo($('div.list#' + ev.data.list + ' div.list-body'));
-            }
-            break;
-        case 'card_move':
-            {
-                var el = $('#'+ev.data.card).detach();
-                if (ev.data.after) el.insertAfter('#'+ev.data.after);
-                else el.prependTo('#'+ev.data.list+' div.list-body');
-            }
-            break;
-        case 'list_move':
-            {
-                var el = $('#'+ev.data.list).detach();
-                if (ev.data.after) el.insertAfter('#'+ev.data.after);
-                else el.prependTo('#main');
-            }
-            break;
-        }
+        if (event_handlers[ev.type])
+            event_handlers[ev.type](ev);
     };
+
+    var bind_handler = function(evtype, f) {
+        event_handlers[evtype] = f;
+    };
+
+    bind_handler('new_card', function(ev) {
+        var el = $('#templates #card-template').clone();
+        el.attr('id', ev.data.name);
+        el.html(ev.data.desc);
+
+        if (ev.data.after) el.insertAfter('#'+ev.data.after);
+        else el.prependTo($('div.list#' + ev.data.list + ' div.list-body'));
+    });
+
+    bind_handler('card_move', function(ev) {
+        var el = $('#'+ev.data.card).detach();
+        if (ev.data.after) el.insertAfter('#'+ev.data.after);
+        else el.prependTo('#'+ev.data.list+' div.list-body');
+    });
+
+    bind_handler('list_move', function(ev) {
+        var el = $('#'+ev.data.list).detach();
+        if (ev.data.after) el.insertAfter('#'+ev.data.after);
+        else el.prependTo('#main');
+    });
 
     var poll_event;
     poll_event = function(oneshot) {
@@ -139,7 +146,7 @@ $(function(){
             contentType: 'application/json',
             data: JSON.stringify( { 'since': last_event_id } ),
             success: function(data) {
-                for (i in data.events) {
+                for (var i in data.events) {
                     handle_event( data.events[i] );
                 }
                 /* get things again in 10s */
