@@ -44,6 +44,7 @@ class Board(object):
         ]
 
         self.card_seq = Seq(6)
+        self.list_seq = Seq(3)
         self.event_seq = Seq(-1)
         self.events = []
 
@@ -92,6 +93,22 @@ def new_card():
         'after': after_id,
         'name': new_card['name'],
         'desc': new_card['desc'],
+        })
+
+@post('/list/new')
+def new_list():
+    # 1. update the model
+    after_id = len(board.lists) and board.lists[-1]['name'] or None
+    list_id = 'list-%d' % (board.list_seq.next(),)
+    label = request.json['label']
+    new_list = { 'name': list_id, 'label': label, 'cards': [] }
+    board.lists.append(new_list)
+
+    # 2. notify other listeners
+    board.add_event( 'new_list', {
+        'after': after_id,
+        'name': new_list['name'],
+        'label': new_list['label'],
         })
 
 @post('/list/move')

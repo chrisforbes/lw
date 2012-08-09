@@ -16,22 +16,26 @@ $(function(){
         forcePlaceholderSize: true,
     });
 
-    $('#main').bind( 'sortupdate', function(ev,ui) {
+    $(document).on('sortupdate','#main', function(ev,ui) {
+        ev.stopPropagation();
         post_event( '/list/move', {
             'list': ui.item.attr('id'),
             'after': ui.item.prev().attr('id') || null,
         });
     });
 
-    /* set up dragging of cards around */
-    $('div.list-body').sortable({
-        tolerance:'pointer',
-        placeholder:'card-placeholder',
-        forcePlaceholderSize: true,
-        connectWith: 'div.list-body',
-    }).disableSelection();
+    var setup_list = function(el) {
+        el.sortable({
+            tolerance:'pointer',
+            placeholder:'card-placeholder',
+            forcePlaceholderSize: true,
+            connectWith: '#main div.list-body',
+        }).disableSelection();
+    };
 
-    $('div.list-body').bind( 'sortupdate', function(ev,ui) {
+    /* set up dragging of cards around */
+
+    $(document).on('sortupdate','div.list-body', function(ev,ui) {
         ev.stopPropagation();
 
         if (ui.item.closest('div.list').attr('id') != $(this).closest('div.list').attr('id')) {
@@ -70,6 +74,32 @@ $(function(){
         form.hide();
     });
 
+    $.getJSON('/raw', function(data) {
+        last_event_id = data.last_event_id
+
+        for( var li in data.lists ) {
+            var l = data.lists[li];
+            var list_el = $('#templates #list-template').clone();
+            list_el.attr('id', l.name);
+            list_el.find('.list-header').html(l.label);
+
+            list_el.appendTo($('#main'));
+            var list_body = list_el.find('.list-body');
+
+            for( var ci in l.cards ) {
+                var c = l.cards[ci];
+                var card_el = $('#templates #card-template').clone();
+                card_el.attr('id', c.name);
+                card_el.html(c.desc);
+                card_el.appendTo(list_body);
+            }
+
+            setup_list(list_body);
+        }
+
+        poll_event();
+    });
+
     var handle_event = function(ev) {
         if (last_event_id >= ev.id) return;
         last_event_id = ev.id;
@@ -77,11 +107,11 @@ $(function(){
         switch( ev.type ) {
         case 'new_card':
             {
-                var el = $('<div class=card type=display:none id=' + ev.data.name + 
+                var el = $('<div class=card id=' + ev.data.name + 
                     '>' + ev.data.desc + '</div>');
 
-                if (ev.data.after) el.insertAfter('#'+ev.data.after).fadeIn();
-                else el.prependTo($('div.list#' + ev.data.list + ' div.list-body')).fadeIn();
+                if (ev.data.after) el.insertAfter('#'+ev.data.after);
+                else el.prependTo($('div.list#' + ev.data.list + ' div.list-body'));
             }
             break;
         case 'card_move':
@@ -117,5 +147,4 @@ $(function(){
                 }
             }});
     };
-    poll_event();
 });
