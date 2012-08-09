@@ -84,4 +84,4 @@ div.add-machinery button {
     color: #eee
 }
 
-div.templates { display: none }
+div#templates { display: none }

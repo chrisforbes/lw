@@ -107,8 +107,9 @@ $(function(){
         switch( ev.type ) {
         case 'new_card':
             {
-                var el = $('<div class=card id=' + ev.data.name + 
-                    '>' + ev.data.desc + '</div>');
+                var el = $('#templates #card-template').clone();
+                el.attr('id', ev.data.name);
+                el.html(ev.data.desc);
 
                 if (ev.data.after) el.insertAfter('#'+ev.data.after);
                 else el.prependTo($('div.list#' + ev.data.list + ' div.list-body'));
